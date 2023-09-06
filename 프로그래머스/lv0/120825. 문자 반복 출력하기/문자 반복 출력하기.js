@@ -1,0 +1,1 @@
+const solution = (arr, num) => [...arr].map(str => str.repeat(num)).join('')
