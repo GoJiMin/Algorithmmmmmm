@@ -1,0 +1,1 @@
+const solution = (num) => Array(num).fill().map((v, i) => i + 1).filter(n => num % n === 0).length
