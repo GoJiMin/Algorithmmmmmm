@@ -1,0 +1,1 @@
+const solution = (slice, n) => n % slice > 0 ? ~~(n / slice) + 1 : ~~(n / slice)
