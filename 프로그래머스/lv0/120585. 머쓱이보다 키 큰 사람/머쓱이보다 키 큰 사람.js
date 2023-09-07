@@ -1,0 +1,1 @@
+const solution = (array, height) => array.filter(n => n > height).length
