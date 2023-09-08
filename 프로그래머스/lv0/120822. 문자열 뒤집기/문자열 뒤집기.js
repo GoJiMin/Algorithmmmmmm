@@ -1,0 +1,1 @@
+const solution = (string) => [...string].reverse().reduce((acc, cur) => acc + cur)
