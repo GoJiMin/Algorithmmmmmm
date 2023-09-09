@@ -1,0 +1,1 @@
+const solution = (n, t) => Array(t).fill(2).reduce((acc, cur) => (acc * cur), n)
