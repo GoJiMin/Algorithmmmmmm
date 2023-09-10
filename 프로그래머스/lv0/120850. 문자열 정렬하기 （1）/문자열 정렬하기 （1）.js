@@ -1,0 +1,1 @@
+const solution = (str) => [...str.replace(/[^0-9]/g, '')].map(v => Number(v)).sort()
