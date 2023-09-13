@@ -1,0 +1,1 @@
+const solution = (str) => str.split(/[a-zA-Z]/).reduce((acc, cur) => +acc + +cur, 0)
