@@ -1,0 +1,1 @@
+const solution = (nums, k) => nums[(k - 1) * 2 % nums.length]
