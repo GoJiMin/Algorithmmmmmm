@@ -1,0 +1,1 @@
+const solution = (arr, n) => arr.sort((a, b) => a - b).reduce((prev, cur) => Math.abs(n - cur) < Math.abs(n - prev) ? cur : prev)
