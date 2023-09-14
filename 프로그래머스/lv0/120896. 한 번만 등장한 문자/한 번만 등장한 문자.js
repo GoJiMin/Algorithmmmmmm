@@ -1,1 +1,1 @@
-const solution = (s) => [...s].filter(el => s.indexOf(el) === s.lastIndexOf(el)).sort().join('')
+const solution = (e) => [...e].filter(c => e.match(new RegExp(c, 'g')).length === 1).sort().join('')
