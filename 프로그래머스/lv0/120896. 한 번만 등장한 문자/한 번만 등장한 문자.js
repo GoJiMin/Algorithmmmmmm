@@ -1,0 +1,1 @@
+const solution = (s) => [...s].filter(el => s.indexOf(el) === s.lastIndexOf(el)).sort().join('')
