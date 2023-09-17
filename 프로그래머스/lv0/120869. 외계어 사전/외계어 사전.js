@@ -1,0 +1,1 @@
+const solution = (spell, dic) => dic.filter(v => spell.every(s => v.includes(s))).length === 1 ? 1 : 2
