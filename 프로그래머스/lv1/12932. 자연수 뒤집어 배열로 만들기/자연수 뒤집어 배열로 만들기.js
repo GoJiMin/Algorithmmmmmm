@@ -1,0 +1,1 @@
+const solution = n => [...(n + '')].map(v => Number(v)).reverse()
