@@ -1,0 +1,1 @@
+const solution = (arr1, arr2) => arr1.map((row, rowIdx) => row.map((col, colIdx) => col + arr2[rowIdx][colIdx]))
