@@ -1,0 +1,1 @@
+const solution = (arr) => arr.length >= 11 ? arr.reduce((acc, cur) => acc + cur) : arr.reduce((acc, cur) => acc * cur)
