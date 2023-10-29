@@ -1,0 +1,1 @@
+const solution = (arr, k) => k % 2 === 0 ? arr.map(num => num + k) : arr.map(num => num * k)
