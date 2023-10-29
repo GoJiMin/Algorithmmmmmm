@@ -1,0 +1,1 @@
+const solution = (start, end) => Array(start-end+1).fill(0).map((num, idx) => start-idx)
