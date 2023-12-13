@@ -1,0 +1,1 @@
+const solution = nums => nums.sort((a, b) => a - b).slice(5)
