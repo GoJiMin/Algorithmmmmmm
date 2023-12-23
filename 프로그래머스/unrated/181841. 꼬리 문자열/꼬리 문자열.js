@@ -1,0 +1,1 @@
+const solution = (list, ex) => list.filter(str => !str.includes(ex)).join('')
