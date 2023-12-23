@@ -1,0 +1,1 @@
+const solution = (str, target) => str.match(target) ? 1 : 0
