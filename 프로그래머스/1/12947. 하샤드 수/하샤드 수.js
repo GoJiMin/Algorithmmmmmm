@@ -1,5 +1,11 @@
 const solution = x => {
-    const digitSum = (''+ x).split("").reduce((acc, cur) => +acc + +cur);
+    let sum = 0;
+    let num = x;
     
-    return x % digitSum === 0
+    do {
+        sum += x % 10
+        x = ~~(x/10)
+    } while(x > 0)
+        
+    return !(num%sum)
 }
