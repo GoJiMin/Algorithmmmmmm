@@ -1,7 +1,11 @@
-const solution = n => Array(n).fill(1).map((v, i) => v + i).reduce((acc, cur) => {
-    if(n % cur === 0) {
-        return acc += cur
+const solution = n => {
+    let result = 0;
+    
+    for(let i = 1; i <= n; i++) {
+        if(n % i === 0) {
+            result += i
+        }
     }
     
-    return acc
-}, 0)
+    return result
+}
