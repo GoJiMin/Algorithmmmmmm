@@ -1,0 +1,1 @@
+const solution = n => (''+n).split('').reduce((acc, cur) => +acc + +cur, 0)
