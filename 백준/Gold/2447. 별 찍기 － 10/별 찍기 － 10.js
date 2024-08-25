@@ -4,27 +4,27 @@ const input = require("fs")
   .trim();
 
 const n = Number(input);
-const boards = Array.from(Array(+n), () => Array(+n).fill("*"));
 
-function swap(r, c, n) {
-  if (n === 1) {
-    return true;
-  }
+const map = Array.from(Array(+n), () => Array(+n).fill("*"));
 
+function addPad(r, c, n) {
   const div = n / 3;
+  const ny = r + div;
+  const nx = c + div;
 
   for (let i = 0; i < div; i++) {
     for (let j = 0; j < div; j++) {
-      boards[r + div + i][c + div + j] = " ";
+      map[ny + i][nx + j] = " ";
     }
   }
 }
 
 function solution(r, c, n) {
-  if (swap(r, c, n)) {
+  if (n === 1) {
     return;
   }
 
+  addPad(r, c, n);
   const size = n / 3;
 
   for (let i = 0; i < 3; i++) {
@@ -36,4 +36,6 @@ function solution(r, c, n) {
 
 solution(0, 0, +n);
 
-console.log(boards.join("\n").replaceAll(",", ""));
+for (let i = 0; i < map.length; i++) {
+  console.log(map[i].join(""));
+}
