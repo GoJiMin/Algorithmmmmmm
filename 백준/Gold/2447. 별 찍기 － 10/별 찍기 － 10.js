@@ -5,37 +5,28 @@ const input = require("fs")
 
 const n = Number(input);
 
-const map = Array.from(Array(+n), () => Array(+n).fill("*"));
-
-function addPad(r, c, n) {
-  const div = n / 3;
-  const ny = r + div;
-  const nx = c + div;
-
-  for (let i = 0; i < div; i++) {
-    for (let j = 0; j < div; j++) {
-      map[ny + i][nx + j] = " ";
-    }
-  }
-}
-
-function solution(r, c, n) {
-  if (n === 1) {
-    return;
+function solution(n) {
+  if (n === 3) {
+    return ["***", "* *", "***"];
   }
 
-  addPad(r, c, n);
-  const size = n / 3;
+  const result = [];
 
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      solution(r + i * size, c + j * size, size);
-    }
+  const stars = solution(n / 3);
+
+  for (let i = 0; i < stars.length; i++) {
+    result.push(stars[i].repeat(3));
   }
+
+  for (let i = 0; i < stars.length; i++) {
+    result.push(stars[i] + " ".repeat(n / 3) + stars[i]);
+  }
+
+  for (let i = 0; i < stars.length; i++) {
+    result.push(stars[i].repeat(3));
+  }
+
+  return result;
 }
 
-solution(0, 0, +n);
-
-for (let i = 0; i < map.length; i++) {
-  console.log(map[i].join(""));
-}
+console.log(solution(+n).join("\n"));
