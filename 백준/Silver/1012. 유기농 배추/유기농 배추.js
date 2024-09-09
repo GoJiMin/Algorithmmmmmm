@@ -48,25 +48,36 @@ class Queue {
   }
 }
 
-const t = input.shift();
+const [n, ...arr] = input;
+const result = [];
 
 const dx = [0, 0, -1, 1];
 const dy = [1, -1, 0, 0];
 
-const ans = [];
+for (let i = 0; i < +n; i++) {
+  const [m, n, k] = arr.shift().split(" ").map(Number);
+  const loc = arr.splice(0, k).map((el) => el.trim().split(" ").map(Number));
 
-function bfs(n, m, boards) {
+  const boards = Array.from(Array(n), () => Array(m).fill(false));
   const vis = Array.from(Array(n), () => Array(m).fill(false));
+
   const queue = new Queue();
+
   let cnt = 0;
 
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < m; j++) {
-      if (boards[i][j] && !vis[i][j]) {
-        queue.push([i, j]);
-        vis[i][j] = true;
-        cnt++;
-      }
+  for (let i = 0; i < k; i++) {
+    const [y, x] = loc[i];
+
+    boards[x][y] = true;
+  }
+
+  for (let i = 0; i < k; i++) {
+    const [y, x] = loc[i];
+
+    if (boards[x][y] && !vis[x][y]) {
+      queue.push([x, y]);
+      vis[x][y] = true;
+      cnt++;
 
       while (!queue.empty()) {
         const [x, y] = queue.pop();
@@ -76,7 +87,7 @@ function bfs(n, m, boards) {
           const ny = y + dy[dir];
 
           if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-          if (vis[nx][ny] || !boards[nx][ny]) continue;
+          if (!boards[nx][ny] || vis[nx][ny]) continue;
 
           queue.push([nx, ny]);
           vis[nx][ny] = true;
@@ -85,23 +96,7 @@ function bfs(n, m, boards) {
     }
   }
 
-  return cnt;
+  result.push(cnt);
 }
 
-for (let i = 0; i < t; i++) {
-  const [m, n, k] = input.shift().split(" ").map(Number);
-
-  const boards = Array.from(Array(n), () => Array(m).fill(false));
-
-  for (let j = 0; j < k; j++) {
-    const [y, x] = input.shift().split(" ").map(Number);
-
-    boards[x][y] = true;
-  }
-
-  const cnt = bfs(n, m, boards);
-
-  ans.push(cnt);
-}
-
-console.log(ans.join("\n"));
+console.log(result.join("\n"));
