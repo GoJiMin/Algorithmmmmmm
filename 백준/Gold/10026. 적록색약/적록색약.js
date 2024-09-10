@@ -48,84 +48,65 @@ class Queue {
   }
 }
 
-const [n, ...arr] = input;
+const [number, ...arr] = input;
+const n = Number(number);
 
-const N = Number(n);
-const graph = arr.map((el) => el.trim().split(""));
+const boards = arr.map((el) => el.trim().split(""));
 
 const dx = [0, 0, -1, 1];
 const dy = [1, -1, 0, 0];
 
-// 적록색약을 가진 사람과 아닌 사람의 vis 배열을 따로 선언
-const visRGB = Array.from(Array(N), () => Array(N).fill(false));
-const visRG = Array.from(Array(N), () => Array(N).fill(false));
+const visRGB = Array.from(Array(n), () => Array(n).fill(false));
+const visRG = Array.from(Array(n), () => Array(n).fill(false));
 
+const queueRGB = new Queue();
+const queueRG = new Queue();
 
-// 마찬가지로 count 변수도 따로 선언
-let cntRGB = 0;
-let cntRG = 0;
+const result = [0, 0];
 
-const queue = new Queue();
+function bfs(i, j, color, vis, idx, queue) {
+  queue.push([i, j]);
+  vis[i][j] = true;
+  result[idx]++;
 
-//적록색약이 아닌 경우
-for (let i = 0; i < N; i++) {
-  for (let j = 0; j < N; j++) {
+  while (!queue.empty()) {
+    const [x, y] = queue.pop();
+
+    for (let dir = 0; dir < 4; dir++) {
+      const nx = x + dx[dir];
+      const ny = y + dy[dir];
+
+      if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
+      if (!vis[nx][ny] && boards[nx][ny] === color) {
+        queue.push([nx, ny]);
+        vis[nx][ny] = true;
+      }
+    }
+  }
+}
+
+for (let i = 0; i < n; i++) {
+  for (let j = 0; j < n; j++) {
     if (!visRGB[i][j]) {
-      queue.push([i, j]);
-      cntRGB++;
-    }
-
-    while (!queue.empty()) {
-      const [x, y] = queue.pop();
-
-      for (let dir = 0; dir < 4; dir++) {
-        const nx = x + dx[dir];
-        const ny = y + dy[dir];
-
-        if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-      // 현재 좌표와 nx, ny 좌표의 색이 같을 경우
-        if (!visRGB[nx][ny] && graph[x][y] === graph[nx][ny]) {
-          visRGB[nx][ny] = true;
-          queue.push([nx, ny]);
-        }
-      }
+      bfs(i, j, boards[i][j], visRGB, 0, queueRGB);
     }
   }
 }
 
-// 적록색약일 경우
-for (let i = 0; i < N; i++) {
-  for (let j = 0; j < N; j++) {
+for (let i = 0; i < n; i++) {
+  for (let j = 0; j < n; j++) {
+    if (boards[i][j] === "R") {
+      boards[i][j] = "G";
+    }
+  }
+}
+
+for (let i = 0; i < n; i++) {
+  for (let j = 0; j < n; j++) {
     if (!visRG[i][j]) {
-      queue.push([i, j]);
-      cntRG++;
-    }
-
-    while (!queue.empty()) {
-      const [x, y] = queue.pop();
-
-      for (let dir = 0; dir < 4; dir++) {
-        const nx = x + dx[dir];
-        const ny = y + dy[dir];
-
-        if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-        if (!visRG[nx][ny]) {
-          // R, G를 동일하게 처리
-          if (graph[x][y] === "R" || graph[x][y] === "G") {
-            if (graph[nx][ny] === "R" || graph[nx][ny] === "G") {
-              queue.push([nx, ny]);
-              visRG[nx][ny] = true;
-            }
-          }
-
-          if (graph[nx][ny] === graph[x][y]) {
-            queue.push([nx, ny]);
-            visRG[nx][ny] = true;
-          }
-        }
-      }
+      bfs(i, j, boards[i][j], visRG, 1, queueRG);
     }
   }
 }
 
-console.log(cntRGB + " " + cntRG);
+console.log(result.join(" "));
