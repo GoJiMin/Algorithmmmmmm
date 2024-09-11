@@ -50,25 +50,28 @@ class Queue {
 
 const [N, ...arr] = input;
 const n = Number(N);
+
 const graph = arr.map((el) => el.trim().split(""));
 
-const vis = Array.from(Array(n), () => Array(n).fill(-1));
+const vis = Array.from(Array(n), () => Array(n).fill(false));
+
 const dx = [0, 0, -1, 1];
 const dy = [1, -1, 0, 0];
 
 const queue = new Queue();
+const result = [];
 
 let cnt = 0;
-const result = [];
 
 for (let i = 0; i < n; i++) {
   for (let j = 0; j < n; j++) {
-    if (vis[i][j] === -1 && graph[i][j] === "1") {
-      vis[i][j] = 0;
+    if (graph[i][j] === "1" && !vis[i][j]) {
       queue.push([i, j]);
+      vis[i][j] = true;
       cnt++;
 
-      let area = 1;
+      let size = 1;
+
       while (!queue.empty()) {
         const [x, y] = queue.pop();
 
@@ -77,15 +80,15 @@ for (let i = 0; i < n; i++) {
           const ny = y + dy[dir];
 
           if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-          if (graph[nx][ny] === "0" || vis[nx][ny] > -1) continue;
+          if (graph[nx][ny] === "0" || vis[nx][ny]) continue;
 
-          vis[nx][ny] = 0;
           queue.push([nx, ny]);
-          area++;
+          vis[nx][ny] = true;
+          size++;
         }
       }
 
-      result.push(area);
+      result.push(size);
     }
   }
 }
