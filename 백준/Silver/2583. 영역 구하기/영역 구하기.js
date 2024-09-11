@@ -49,49 +49,52 @@ class Queue {
 }
 
 const [mnk, ...arr] = input;
-const [m, n, k] = mnk.split(" ").map(Number);
-const loc = arr.map((el) => el.trim().split(" "));
 
-const vis = Array.from(Array(m), () => Array(n).fill(-1));
+const [n, m, k] = mnk.split(" ").map(Number);
+const locs = arr.map((el) => el.trim().split(" "));
+
+const vis = Array.from(Array(n), () => Array(m).fill(false));
+
 const dx = [0, 0, -1, 1];
 const dy = [1, -1, 0, 0];
 
-const queue = new Queue();
+for (let loc of locs) {
+  const [x1, y1, x2, y2] = loc.map(Number);
 
-for (let i = 0; i < k; i++) {
-  const [x1, y1, x2, y2] = loc[i].map(Number);
-
-  for (let y = y1; y < y2; y++) {
-    for (let x = x1; x < x2; x++) {
-      vis[m - y - 1][x] = 0;
+  for (let i = y1; i < y2; i++) {
+    for (let j = x1; j < x2; j++) {
+      vis[i][j] = true;
     }
   }
 }
 
+const queue = new Queue();
+
 let cnt = 0;
 const result = [];
 
-for (let i = 0; i < m; i++) {
-  for (let j = 0; j < n; j++) {
-    if (vis[i][j] === -1) {
+for (let i = 0; i < n; i++) {
+  for (let j = 0; j < m; j++) {
+    if (!vis[i][j]) {
       queue.push([i, j]);
-      vis[i][j] = 0;
+      vis[i][j] = true;
       cnt++;
 
       let size = 1;
+
       while (!queue.empty()) {
-        const [y, x] = queue.pop();
+        const [x, y] = queue.pop();
 
         for (let dir = 0; dir < 4; dir++) {
           const nx = x + dx[dir];
           const ny = y + dy[dir];
 
           if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-          if (vis[ny][nx] > -1) continue;
+          if (vis[nx][ny]) continue;
 
-          vis[ny][nx] = 0;
+          queue.push([nx, ny]);
+          vis[nx][ny] = true;
           size++;
-          queue.push([ny, nx]);
         }
       }
 
