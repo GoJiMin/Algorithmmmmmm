@@ -48,51 +48,40 @@ class Queue {
   }
 }
 
-const t = input.shift();
-const queue = new Queue();
+const n = Number(input[0]);
 
-for (let i = 0; i < +t; i++) {
-  const I = ~~input.shift();
+for (let i = 0; i < n; i++) {
+  const [I, ...arr] = input.splice(1, 3);
+  const loc = arr.map((el) => el.trim().split(" ").map(Number));
 
-  const dist = Array.from(Array(I), () => Array(I).fill(0));
+  const vis = Array.from(Array(+I), () => Array(+I).fill(-1));
+  const queue = new Queue();
 
-  const [curX, curY] = input.shift().split(" ").map(Number);
-  const [targetX, targetY] = input.shift().split(" ").map(Number);
+  queue.push(loc[0]);
+  vis[loc[0][0]][loc[0][1]] = 0;
 
-  queue.push([curX, curY]);
-
-  let minDist = Infinity;
-  while (!queue.empty()) {
+  while (vis[loc[1][0]][loc[1][1]] === -1) {
     const [x, y] = queue.pop();
-
-    if (x === targetX && y === targetY) {
-      minDist = 0;
-      break;
-    }
 
     for (let act of [
       [x + 2, y + 1],
       [x + 1, y + 2],
-      [x - 1, y + 2],
+      [x + 2, y - 1],
+      [x + 1, y - 2],
       [x - 2, y + 1],
+      [x - 1, y + 2],
       [x - 2, y - 1],
       [x - 1, y - 2],
-      [x + 1, y - 2],
-      [x + 2, y - 1],
     ]) {
       const [nx, ny] = act;
 
-      if (nx < 0 || nx >= I || ny < 0 || ny >= I) continue;
-      if (nx === targetX && ny === targetY) {
-        minDist = Math.min(minDist, dist[x][y] + 1);
-        break;
-      }
-      if (dist[nx][ny] === 0) {
-        queue.push([nx, ny]);
-        dist[nx][ny] = dist[x][y] + 1;
-      }
+      if (nx < 0 || nx >= +I || ny < 0 || ny >= +I) continue;
+      if (vis[nx][ny] > 0) continue;
+
+      queue.push([nx, ny]);
+      vis[nx][ny] = vis[x][y] + 1;
     }
   }
 
-  console.log(minDist);
+  console.log(vis[loc[1][0]][loc[1][1]]);
 }
