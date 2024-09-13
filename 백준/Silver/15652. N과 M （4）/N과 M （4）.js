@@ -1,32 +1,23 @@
 const input = require("fs")
   .readFileSync(process.platform === "linux" ? "/dev/stdin" : "input.txt")
   .toString()
-  .trim()
-  .split(" ");
+  .trim();
 
-const [n, m] = input;
+const [n, m] = input.split(" ").map(Number);
 
 const arr = [];
 
 let result = "";
 
-function solution(k) {
-  if (k === +m) {
-    result += arr.join(" ") + "\n";
+function solution(k, idx) {
+  if (k === m) return (result += arr.join(" ") + "\n");
 
-    return;
-  }
-
-  let start = 1;
-
-  if (k !== 0) start = arr[k - 1];
-
-  for (let i = start; i <= +n; i++) {
+  for (let i = idx; i <= n; i++) {
     arr[k] = i;
-    solution(k + 1);
+    solution(k + 1, i);
   }
 }
 
-solution(0);
+solution(0, 1);
 
 console.log(result);
