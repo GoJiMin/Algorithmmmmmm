@@ -4,29 +4,24 @@ const input = require("fs")
   .trim()
   .split("\n");
 
-const [nm, arr] = input;
+const [n, m] = input[0].split(" ").map(Number);
+const nums = input[1].split(" ").sort((a, b) => a - b);
 
-const [n, m] = nm.split(" ");
-const nums = arr.split(" ").sort((a, b) => a - b);
+const isUsed = Array(n).fill(0);
 
-const list = [];
-const isUsed = Array(10001).fill(0);
+const arr = [];
 
 let result = "";
 
 function solution(k) {
-  if (k === +m) {
-    result += list.join(" ") + "\n";
+  if (k === m) return (result += arr.join(" ") + "\n");
 
-    return;
-  }
-
-  for (let i = 0; i < +n; i++) {
-    if (!isUsed[Number(nums[i])]) {
-      list[k] = Number(nums[i]);
-      isUsed[Number(nums[i])] = 1;
+  for (let i = 0; i < n; i++) {
+    if (!isUsed[i]) {
+      arr[k] = nums[i];
+      isUsed[i] = 1;
       solution(k + 1);
-      isUsed[Number(nums[i])] = 0;
+      isUsed[i] = 0;
     }
   }
 }
