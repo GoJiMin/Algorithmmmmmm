@@ -7,22 +7,18 @@ const input = require("fs")
 const [t, ...arr] = input.map(Number);
 const result = [];
 
-function solution(n) {
-  const d = Array(n + 1).fill(0);
+const d = Array(11).fill(0);
 
-  d[1] = 1;
-  d[2] = 2;
-  d[3] = 4;
+d[1] = 1;
+d[2] = 2;
+d[3] = 4;
 
-  for (let i = 4; i < 11; i++) {
-    d[i] = d[i - 3] + d[i - 2] + d[i - 1];
-  }
-
-  result.push(d[n]);
+for (let i = 4; i < 11; i++) {
+  d[i] = d[i - 3] + d[i - 2] + d[i - 1];
 }
 
 for (let i = 0; i < t; i++) {
-  solution(arr[i]);
+  result.push(d[arr[i]]);
 }
 
 console.log(result.join("\n"));
