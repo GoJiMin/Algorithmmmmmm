@@ -1,58 +1,45 @@
 const input = require("fs")
-  .readFileSync(process.platform === "linux" ? "/dev/stdin" : "script.txt")
+  .readFileSync(process.platform === "linux" ? "/dev/stdin" : "input.txt")
   .toString()
   .trim()
   .split("\n");
 
-const ans = [];
+const result = [];
 
-for (let s of input) {
+input.forEach((strs) => {
+  if (strs === ".") return;
+
   const stack = [];
-  let result = true;
 
-  if (s[0] === ".") {
-    continue;
-  }
+  for (let i = 0; i < strs.length; i++) {
+    if (strs[i] === "(" || strs[i] === "[") stack.push(strs[i]);
 
-  for (let i = 0; i < s.length; i++) {
-    if (s[i] === "[" || s[i] === "(") {
-      stack.push(s[i]);
+    if (strs[i] === ")") {
+      if (stack.length === 0 || stack.at(-1) !== "(") {
+        result.push("no");
+
+        return;
+      }
+
+      stack.pop();
     }
 
-    if (s[i] === "]") {
-      if (stack.length === 0) {
-        result = false;
-        break;
+    if (strs[i] === "]") {
+      if (stack.length === 0 || stack.at(-1) !== "[") {
+        result.push("no");
+
+        return;
       }
 
-      if (stack.at(-1) === "[") {
-        stack.pop();
-      } else {
-        result = false;
-        break;
-      }
-    }
-
-    if (s[i] === ")") {
-      if (stack.length === 0) {
-        result = false;
-        break;
-      }
-
-      if (stack.at(-1) === "(") {
-        stack.pop();
-      } else {
-        result = false;
-        break;
-      }
+      stack.pop();
     }
   }
 
-  if (result) {
-    stack.length === 0 ? ans.push("yes") : ans.push("no");
+  if (stack.length === 0) {
+    result.push("yes");
   } else {
-    ans.push("no");
+    result.push("no");
   }
-}
+});
 
-console.log(ans.join("\n"));
+console.log(result.join("\n"));
