@@ -17,6 +17,40 @@ const input = require("fs")
  * 
    */
 
+// const v_n = Number(input[0]);
+// const t_n = Number(input[1]);
+
+// const adj = Array.from({ length: v_n + 1 }, () => []);
+// const vis = Array(v_n + 1).fill(false);
+
+// for (let i = 2; i <= t_n + 1; i++) {
+//   const [v, u] = input[i].split(" ").map(Number);
+
+//   adj[v].push(u);
+//   adj[u].push(v);
+// }
+
+// const queue = [];
+
+// queue.push(1);
+// vis[1] = true;
+
+// let cnt = 0;
+// while (queue.length) {
+//   const cur = queue.shift();
+
+//   for (const nxt of adj[cur]) {
+//     if (vis[nxt]) continue;
+//     queue.push(nxt);
+//     vis[nxt] = true;
+//     cnt++;
+//   }
+// }
+
+// console.log(cnt);
+
+// 위는 BFS 풀이.. 아래는 DFS 풀이..
+
 const v_n = Number(input[0]);
 const t_n = Number(input[1]);
 
@@ -30,21 +64,19 @@ for (let i = 2; i <= t_n + 1; i++) {
   adj[u].push(v);
 }
 
-const queue = [];
-
-queue.push(1);
-vis[1] = true;
-
 let cnt = 0;
-while (queue.length) {
-  const cur = queue.shift();
+function dfs(v) {
+  if (vis[v]) return;
+  vis[v] = true;
 
-  for (const nxt of adj[cur]) {
-    if (vis[nxt]) continue;
-    queue.push(nxt);
-    vis[nxt] = true;
-    cnt++;
+  for (const nxt of adj[v]) {
+    if (!vis[nxt]) {
+      dfs(nxt);
+      cnt++;
+    }
   }
 }
+
+dfs(1);
 
 console.log(cnt);
