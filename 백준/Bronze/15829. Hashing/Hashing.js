@@ -7,18 +7,16 @@ const input = require("fs")
 const l = Number(input[0]);
 const str = input[1];
 
-const MOD = 123_456_789_1;
+const MOD = 123_456_789_1n;
+const BASE = 31n;
 
-function hashing(s, i) {
-  const n = s.charCodeAt() - 96;
+let pow = 1n;
+let result = 0n;
 
-  return (n * (31 ** i % MOD)) % MOD;
+for (let i = 0n; i < l; i++) {
+  const n = BigInt(str[i].charCodeAt(0) - 96);
+  result = (result + n * pow) % MOD;
+  pow = (pow * BASE) % MOD;
 }
 
-let result = 0;
-
-for (let i = 0; i < l; i++) {
-  result += hashing(str[i], i);
-}
-
-console.log(result);
+console.log(result.toString());
