@@ -18,6 +18,4 @@ function gcd(a, b) {
 
 const pad = Number(gcd(a, b));
 
-const result = [];
-for (let i = 0; i < pad; i++) result.push(1);
-console.log(result.join(''));
+console.log('1'.repeat(pad));
