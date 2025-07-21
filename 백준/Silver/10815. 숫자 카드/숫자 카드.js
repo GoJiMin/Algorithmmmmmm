@@ -1,24 +1,29 @@
-const input = require("fs")
-  .readFileSync(process.platform === "linux" ? "/dev/stdin" : "input.txt")
+const input = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
-  .split("\n");
+  .split('\n');
 
-const n = Number(input[0]);
-const m = Number(input[2]);
+const N = Number(input[0]);
+const arrN = input[1].split(' ').map(Number);
 
-const cards = input[1].trim().split(" ");
-const hasCards = input[3].trim().split(" ");
-
-const map = new Map();
-
-for (let i = 0; i < n; i++) {
-  map.set(cards[i]);
+const hasCard = Array(2000_0002);
+for (let i = 0; i < N; i++) {
+  hasCard[arrN[i] + 1000_0000] = true;
 }
 
-const result = [];
-for (let i = 0; i < m; i++) {
-  result.push(map.has(hasCards[i]) ? 1 : 0);
+const M = Number(input[2]);
+const arrM = input[3].split(' ').map(Number);
+
+const ans = [];
+for (let i = 0; i < M; i++) {
+  const target = arrM[i] + 1000_0000;
+
+  if (hasCard[target]) {
+    ans.push(1);
+  } else {
+    ans.push(0);
+  }
 }
 
-console.log(result.join(" "));
+console.log(ans.join(' '));
