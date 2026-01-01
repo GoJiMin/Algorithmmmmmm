@@ -1,87 +1,43 @@
-const input = require("fs")
-  .readFileSync(process.platform === "linux" ? "/dev/stdin" : "input.txt")
+const input = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
-  .split("\n");
+  .split('\n');
 
-class Node {
-  constructor(data) {
-    this.data = data;
-    this.next = null;
-  }
+const [n, m] = input[0].split(' ').map(Number);
+const board = [];
+
+for (let i = 1; i <= n; i++) {
+  board.push(input[i].trim().split(''));
 }
 
-class Queue {
-  constructor() {
-    this.head = null;
-    this.tail = null;
-    this.length = 0;
-  }
+const dirs = [
+  [-1, 0],
+  [1, 0],
+  [0, -1],
+  [0, 1],
+];
 
-  push(data) {
-    const node = new Node(data);
+const dist = Array.from({length: n}, () => Array(m).fill(-1));
+dist[0][0] = 1;
 
-    if (!this.head) {
-      this.head = node;
-      this.tail = node;
-    } else {
-      this.tail.next = node;
-      this.tail = node;
-    }
+const queue = [];
+let head = 0;
 
-    this.length++;
-  }
-
-  pop() {
-    if (!this.head) return;
-
-    const data = this.head.data;
-
-    this.head = this.head.next;
-    this.length--;
-
-    return data;
-  }
-
-  empty() {
-    return this.length === 0;
-  }
-}
-
-const [nm, ...arr] = input;
-const [n, m] = nm.split(" ").map(Number);
-const boards = arr.map((el) => el.trim().split(""));
-
-const dis = Array.from(Array(n), () => Array(m).fill(-1));
-const dx = [0, 0, -1, 1];
-const dy = [1, -1, 0, 0];
-
-for (let i = 0; i < n; i++) {
-  for (let j = 0; j < m; j++) {
-    if (boards[i][j] === "0") {
-      dis[i][j] = 0;
-    }
-  }
-}
-
-const queue = new Queue();
-
-dis[0][0] = 1;
 queue.push([0, 0]);
+while (head !== queue.length) {
+  const [x, y] = queue[head++];
 
-while (!queue.empty()) {
-  const [x, y] = queue.pop();
-
-  for (let dir = 0; dir < 4; dir++) {
-    const nx = x + dx[dir];
-    const ny = y + dy[dir];
+  for (const [dx, dy] of dirs) {
+    const nx = x + dx;
+    const ny = y + dy;
 
     if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-    if (dis[nx][ny] > -1) continue;
+    if (board[nx][ny] === '0' || dist[nx][ny] > -1) continue;
 
+    dist[nx][ny] = dist[x][y] + 1;
     queue.push([nx, ny]);
-    dis[nx][ny] = dis[x][y] + 1;
   }
 }
 
-console.log(dis[n - 1][m - 1]);
+console.log(dist[n - 1][m - 1]);
