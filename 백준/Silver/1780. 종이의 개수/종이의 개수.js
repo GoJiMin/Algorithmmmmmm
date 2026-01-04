@@ -1,38 +1,80 @@
-const input = require("fs")
-  .readFileSync(process.platform === "linux" ? "/dev/stdin" : "input.txt")
+const input = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input.txt')
   .toString()
   .trim()
-  .split("\n");
+  .split('\n');
 
-const [n, ...arr] = input;
-const paper = arr.map((el) => el.trim().split(" "));
-const cnt = [0, 0, 0];
+const n = Number(input[0]);
 
+const arr = [];
+for (let i = 1; i <= n; i++) arr.push(input[i].trim().split(' '));
+
+/**
+ * n * n 크기의 행렬인데.. n은 무조건 3배수로 들어옵니다..
+ * n이 3인 경우가 사실상 최소라고 볼 수 있는데요..
+ *
+ * 분할정복 문제의 핵심은.. 가장 최소일 때의 값을 사용해 어떤 규칙을 찾아내야 합니다..
+ * 우선 3의 배수..인데요.. n이 9라면 n이 3일 때의 행렬을 9개 이어붙인 행렬과 동일합니다..
+ *
+ * 문제의 규칙에서도 종이를 같은 크기의 종이 9개로 자른다고 합니다.. 중요한 점이라면 이 종이를 자르는 기준?을 어떻게 잡을까요..
+ *
+ * 무엇보다 이 종이 영역이 같은 종이로 이루어져있는지, 그리고 이 영역에서 몇 개의 종이가 생기는지는 어떻게 판단할까요?
+ *
+ * 우선 정해진 종이 영역을 탐색하는 함수부터 만들어봅시다.
+ */
+
+// 전해진 좌표로부터 어디까지 탐색할지 정해야 합니다.. 그럼 (x, y)좌표로부터 +n까지 탐색해야 하니 인자는 3개..
 function check(x, y, n) {
+  const cur = arr[x][y]; // 이 종이랑 수가 다른지 확인해야겠네요..
   for (let i = x; i < x + n; i++) {
     for (let j = y; j < y + n; j++) {
-      if (paper[x][y] !== paper[i][j]) return false;
+      if (cur !== arr[i][j]) return false;
     }
   }
 
   return true;
 }
 
-function solve(x, y, z) {
-  if (check(x, y, z)) {
-    cnt[Number(paper[x][y]) + 1] += 1;
+const result = [0, 0, 0];
+// 종이는 탐색할 수 있게 됐는데요.. 중요한건 이제 이 종이를 그대로 사용할지, 자를지도 판단해야 합니다..
+// 함수는 재귀적으로 (x, y)좌표로부터 n * n 크기의 행렬에서 종이의 수를 구해야 하니 인자는 3개..
+function rec(x, y, n) {
+  // base condition을 정해봅시다..
+  // 함수가 언제 종료되어야 할까요..?
+  // 제 생각엔 주어진 영역이 모두 같은 종이로 이루어져 있다면 종료하면 될 거 같은데요..
+  if (check(x, y, n)) {
+    const cur = Number(arr[x][y]) + 1; // -1 0 1 이니까..
+
+    result[cur]++;
     return;
   }
 
-  let n = z / 3;
+  /**
+   * 이제 동작을 정의해봅시다..
+   * 우선 base condition을 통과하지 못했다면 우리는 종이를 잘라야 합니다..
+   * 종이 하나를 9개로 잘랐다면 각 종이에 대해 재귀적으로 다시 호출해야 하는데 어떻게 호출할 수 있을까요..?
+   *
+   * 우선 x = 0, y = 0, n = 9에 대해 호출된 상태에서 base condition이 통과하지 못했다고 가정해봅시다..
+   *
+   * 그럼 우리는 9 * 9 격자를 3 * 3격자 9개로 잘라 검사해야 하는데요..
+   * 1번 격자는 (0, 0)부터 (2, 2)군요..
+   * 2번 격자는 (0, 3)부터 (2, 5)군요..
+   * 3번 격자는 (0, 6)부터 (2, 8)군요..
+   *
+   * 4번 격자는 (3, 0)부터 (5, 2)군요..
+   * 5번 격자는 (3, 3)부터 (5, 5)군요..
+   * 6번 격자는 (3, 6)부터 (5, 8)군요..
+   *
+   * 규칙이 있네요..
+   */
 
+  const z = n / 3;
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      solve(x + i * n, y + j * n, n);
+      rec(x + i * z, y + j * z, z);
     }
   }
 }
 
-solve(0, 0, +n);
-
-console.log(cnt.join("\n"));
+rec(0, 0, n);
+console.log(result.join('\n'));
